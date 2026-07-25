@@ -1,0 +1,12 @@
+{
+  "name": "kanbo-api",
+  "version": "1.0.0",
+  "description": "REST API for collaborative task and project management, with JWT authentication and role-based access control. Portfolio project built with Node.js, Express and Prisma.",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
