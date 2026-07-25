@@ -1,18 +1,13 @@
 const express = require("express");
-const prisma = require("./prisma.js");
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const port = 3000;
 
 
-app.get('/', async (req, res) => {
+app.use(express.json());
+app.use('/auth', authRoutes);
 
-  const users = await prisma.user.findMany();
-
-  res.status(200).json({ message: "Kanbo API is running", users });
+app.listen(port, ()=>{
+  console.log(`Servidor corriendo en el puerto http://localhost:${port}`);
 });
-
-app.listen(port,()=>{
-console.log(`Server is runing in port http://localhost:${port}`);
-});
-
