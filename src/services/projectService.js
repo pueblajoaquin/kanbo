@@ -6,7 +6,7 @@ async function createProject({name, description, userId}){
     })
 
 
-    const projectMember = await prisma.projectMember.create({
+    const projectMember = await prisma.projectMembers.create({
         data: {
             userId: userId,
             projectId: project.id,
@@ -22,8 +22,43 @@ async function createProject({name, description, userId}){
     }
 }
 
+async function getUserProject(userId){
+    const memberships = await prisma.projectMembers.findMany({
+        where: {userId},
+        include: {project: true}
+    })
+
+    return memberships.map((m) => m.project);
+}
+
+async function getProjectById(projectId, userId){
+    const membership = await prisma.projectMembers.findFirst({
+        where: {projectId, userId}
+    });
+
+    if(!membership){
+        throw new Error('NOT_A_MEMBER');
+    }
+
+    const project = await prisma.project.findUnique({
+        where : {id: projectId}
+    })
+
+    return project;
+}
+
+async function deleteProject(projectId,userId){
+    const membership = await prisma.projectMembers.findFirst({
+        where: {projectId, userId, role : 'owner'}
+    });
+
+    if(!membership){
+        throw new Error('NOT_AN_OWNER');
+    }
+    
+    await prisma.project.delete({where: {id: projectId}})
+}
 
 
 
-
-module.exports = {createProject}
+module.exports = {createProject, getUserProject, getProjectById, deleteProject}
