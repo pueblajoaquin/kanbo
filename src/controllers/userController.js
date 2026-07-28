@@ -1,8 +1,8 @@
-const {getUserById} = require ('../services/authService')
+const {getUserByIdService} = require ('../services/authService')
 
-async function getMe(req, res){
+async function getUserByIdController(req, res){
     try{
-        const user = await getUserById(req.userId);
+        const user = await getUserByIdService(req.userId);
         return res.status(200).json(user);
     }catch(error){
         if (error.message === 'USER_NOT_FOUND'){
@@ -13,4 +13,4 @@ async function getMe(req, res){
     }
 }
 
-module.exports = {getMe};
+module.exports = {getUserByIdController};

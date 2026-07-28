@@ -1,6 +1,6 @@
-const {createProject,deleteProject,getProjectById,getUserProject} = require('../services/projectService');
+const {createProjectService,deleteProjectService,getProjectByIdService,getUserProjectService} = require('../services/projectService');
 
-async function create(req, res){
+async function createProjectController(req, res){
     try{
         const {name,description} = req.body;
         const userId = req.userId
@@ -8,7 +8,7 @@ async function create(req, res){
             return res.status(400).json({error: 'name is required'});
         }
 
-        const project = await createProject({name, description, userId});
+        const project = await createProjectService({name, description, userId});
         return res.status(201).json(project);
 
     }catch (error){
@@ -17,11 +17,11 @@ async function create(req, res){
     }
 }
 
-async function deleteP(req,res) {
+async function deleteProjectController(req,res) {
     try{
         const {id} = req.params;
         const userId = req.userId;
-        await deleteProject(id,userId);
+        await deleteProjectService(id,userId);
         res.status(200).json({message: 'Project deleted'})
     }catch(error){
         if(error.message === 'NOT_AN_OWNER'){
@@ -32,10 +32,10 @@ async function deleteP(req,res) {
     }
 }
 
-async function getAllProject(req, res){
+async function getUserProjectController(req, res){
     try{
         const {userId} = req.userId;
-        const projects = await getUserProject(userId);
+        const projects = await getUserProjectService(userId);
         return res.status(200).json(projects);
     }catch(error){
         console.error(error);
@@ -43,11 +43,11 @@ async function getAllProject(req, res){
     }
 }
 
-async function getById(req,res){
+async function getProjectByIdController(req,res){
     try{
         const {id} = req.params;
         const userId = req.userId;
-        const project = await getProjectById(id, userId);
+        const project = await getProjectByIdService(id, userId);
         return res.status(200).json({project})
     }catch(error){
         if(error.message === 'NOT_A_MEMBER'){
@@ -58,4 +58,4 @@ async function getById(req,res){
     }
 }
 
-module.exports = {create,deleteP,getAllProject,getById}
+module.exports = {createProjectController,deleteProjectController,getUserProjectController,getProjectByIdController}

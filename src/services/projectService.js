@@ -1,6 +1,6 @@
 const prisma = require(`../prisma`);
 
-async function createProject({name, description, userId}){
+async function createProjectService({name, description, userId}){
     const project = await prisma.project.create({
         data: {name, description},
     })
@@ -22,7 +22,7 @@ async function createProject({name, description, userId}){
     }
 }
 
-async function getUserProject(userId){
+async function getUserProjectService(userId){
     const memberships = await prisma.projectMembers.findMany({
         where: {userId},
         include: {project: true}
@@ -31,7 +31,7 @@ async function getUserProject(userId){
     return memberships.map((m) => m.project);
 }
 
-async function getProjectById(projectId, userId){
+async function getProjectByIdService(projectId, userId){
     const membership = await prisma.projectMembers.findFirst({
         where: {projectId, userId}
     });
@@ -47,7 +47,7 @@ async function getProjectById(projectId, userId){
     return project;
 }
 
-async function deleteProject(projectId,userId){
+async function deleteProjectService(projectId,userId){
     const membership = await prisma.projectMembers.findFirst({
         where: {projectId, userId, role : 'owner'}
     });
@@ -61,4 +61,4 @@ async function deleteProject(projectId,userId){
 
 
 
-module.exports = {createProject, getUserProject, getProjectById, deleteProject}
+module.exports = {createProjectService, getUserProjectService, getProjectByIdService, deleteProjectService}

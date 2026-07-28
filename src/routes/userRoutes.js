@@ -1,9 +1,9 @@
 const express = require('express');
-const {getMe} = require('../controllers/userController');
+const {getUserByIdController} = require('../controllers/userController');
 const {authenticate} = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.get('/me',authenticate,getMe);
+router.get('/me',authenticate,getUserByIdController);
 
 module.exports = router;
