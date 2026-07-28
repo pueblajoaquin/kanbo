@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const SALT_ROUNDS = 10;
 
-async function registerUser({ name, email, password }) {
+async function registerUserService({ name, email, password }) {
   const existingUser = await prisma.user.findUnique({
     where: { email },
   });
@@ -21,7 +21,7 @@ async function registerUser({ name, email, password }) {
   return { id: user.id, name: user.name, email: user.email };
 }
 
-async function loginUser({email,password}){
+async function loginUserService({email,password}){
     const user = await prisma.user.findUnique({
         where: {email}
     })
@@ -47,7 +47,7 @@ async function loginUser({email,password}){
     }
 }
 
-async function getUserById(userId){
+async function getUserByIdService(userId){
     const user = await prisma.user.findUnique({
         where: {id: userId}
     });
@@ -57,4 +57,4 @@ async function getUserById(userId){
     return {id: user.id, name: user.name, email: user.email, createdAt: user.createdAt};
 }
 
-module.exports = { registerUser, loginUser, getUserById };
+module.exports = { registerUserService, loginUserService, getUserByIdService };
