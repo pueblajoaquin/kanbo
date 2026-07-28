@@ -7,8 +7,8 @@
   "type": "commonjs",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "start": "node src/index.js"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
@@ -18,7 +18,7 @@
     "prisma": "^6.19.3"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "globals": "^17.7.0"
+    "jest": "^30.4.2",
+    "supertest": "^7.2.2"
   }
 }
