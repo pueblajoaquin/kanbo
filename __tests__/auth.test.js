@@ -46,3 +46,34 @@ describe('POST /auth/register', ()=>{
     });
 
 })
+
+describe('POST /auth/login', () => {
+  const email = `logintest-${Date.now()}@example.com`;
+  const password = '12345678';
+
+  beforeAll(async () => {
+    await request(app).post('/auth/register').send({ name: 'Login Test', email, password });
+  });
+
+  it('logs in with correct credentials and returns a token', async () => {
+    const response = await request(app).post('/auth/login').send({ email, password });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('token');
+    expect(response.body.user.email).toBe(email);
+  });
+
+  it('rejects login with wrong password', async () => {
+    const response = await request(app).post('/auth/login').send({ email, password: 'wrongpassword' });
+
+    expect(response.status).toBe(401);
+  });
+
+  it('rejects login with an email that does not exist', async () => {
+    const response = await request(app)
+      .post('/auth/login')
+      .send({ email: 'doesnotexist@example.com', password: '12345678' });
+
+    expect(response.status).toBe(401);
+  });
+});
