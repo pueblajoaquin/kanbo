@@ -1,5 +1,7 @@
 const { createTaskService, getProjectTasksService, updateTaskStatusService, deleteTaskService } = require('../services/taskService')
 
+const ALLOWED_TASK_STATUSES = new Set(['pending', 'in_progress', 'done'])
+
 async function createTaskController (req, res) {
   try {
     const { id: projectId } = req.params
@@ -38,6 +40,10 @@ async function updateTaskStatusController (req, res) {
   try {
     const { id: taskId } = req.params
     const { status } = req.body
+
+    if (!ALLOWED_TASK_STATUSES.has(status)) {
+      return res.status(400).json({ error: 'Invalid status' })
+    }
 
     const task = await updateTaskStatusService(taskId, req.userId, status)
     return res.status(200).json(task)
