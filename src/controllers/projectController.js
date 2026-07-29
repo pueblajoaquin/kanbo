@@ -33,7 +33,7 @@ async function deleteProjectController (req, res) {
 
 async function getUserProjectController (req, res) {
   try {
-    const { userId } = req.userId
+    const userId = req.userId
     const projects = await getUserProjectService(userId)
     return res.status(200).json(projects)
   } catch (error) {
