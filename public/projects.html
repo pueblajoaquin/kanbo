@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kanbo — Projects</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero-card">
+      <div>
+        <p class="eyebrow">Workspace overview</p>
+        <h1 id="welcome-name">My Projects</h1>
+        <p id="project-hint" class="hero-copy">All your active boards in one place.</p>
+      </div>
+      <div class="hero-actions">
+        <div class="metric">
+          <span class="metric-label">Projects</span>
+          <strong id="project-count">0 projects</strong>
+        </div>
+        <button id="logout-btn" class="secondary-btn">Log out</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <form id="new-project-form" class="inline-form">
+        <input type="text" id="project-name" placeholder="New project name" required>
+        <button type="submit">Create</button>
+      </form>
+
+      <p id="error-message" class="error" aria-live="polite"></p>
+
+      <ul id="project-list" class="stack-list"></ul>
+    </section>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/projects.js"></script>
+</body>
+</html>

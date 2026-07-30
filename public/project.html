@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kanbo — Project</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero-card">
+      <div>
+        <p class="eyebrow">Project board</p>
+        <h1 id="project-name">Loading...</h1>
+        <p id="task-summary" class="hero-copy">Loading your tasks and progress.</p>
+      </div>
+      <div class="hero-actions">
+        <div class="metric">
+          <span class="metric-label">Tasks</span>
+          <strong id="task-count">0 tasks</strong>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Done</span>
+          <strong id="done-count">0 done</strong>
+        </div>
+        <button id="logout-btn" class="secondary-btn">Log out</button>
+      </div>
+    </section>
+
+    <a href="projects.html" class="back-link">&larr; Back to projects</a>
+
+    <section class="panel">
+      <form id="new-task-form" class="inline-form">
+        <input type="text" id="task-title" placeholder="New task title" required>
+        <button type="submit">Add task</button>
+      </form>
+
+      <p id="error-message" class="error" aria-live="polite"></p>
+
+      <ul id="task-list" class="stack-list"></ul>
+    </section>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/project.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kanbo — Register</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-hero">
+      <p class="eyebrow">Kanbo</p>
+      <h1>Build a workspace that feels alive.</h1>
+      <p class="hero-copy">Create an account and get a focused board for projects, collaborators, and tasks.</p>
+    </section>
+    <section class="container card">
+      <h1 class="card-title">Register</h1>
+      <form id="register-form">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Register</button>
+      </form>
+      <p id="error-message" class="error"></p>
+      <p>Already have an account? <a href="index.html">Log in</a></p>
+    </section>
+  </main>
+  <script src="js/auth.js"></script>
+</body>
+</html>
