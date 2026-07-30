@@ -38,6 +38,30 @@
 
       <ul id="task-list" class="stack-list"></ul>
     </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Members</p>
+          <h2 class="section-title">Project access</h2>
+        </div>
+        <div class="metric metric-inline">
+          <span class="metric-label">Members</span>
+          <strong id="member-count">0 members</strong>
+        </div>
+      </div>
+
+      <p id="member-summary" class="hero-copy">Invite teammates and keep track of who owns the project.</p>
+
+      <form id="invite-member-form" class="inline-form">
+        <input type="email" id="member-email" placeholder="Teammate email" required>
+        <button type="submit">Invite member</button>
+      </form>
+
+      <p id="member-message" class="error" aria-live="polite"></p>
+
+      <ul id="member-list" class="stack-list"></ul>
+    </section>
   </main>
   <script src="js/api.js"></script>
   <script src="js/project.js"></script>
