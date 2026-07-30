@@ -1,4 +1,4 @@
-function getProjectIdFromUrl() {
+function getProjectIdFromUrl () {
   const params = new URLSearchParams(window.location.search)
   return params.get('id')
 }
@@ -19,7 +19,7 @@ const addTaskButton = newTaskForm.querySelector('button[type="submit"]')
 const inviteMemberButton = inviteMemberForm.querySelector('button[type="submit"]')
 const projectId = getProjectIdFromUrl()
 
-async function loadProject() {
+async function loadProject () {
   errorMessage.textContent = ''
   memberMessage.textContent = ''
 
@@ -67,7 +67,7 @@ async function loadProject() {
   renderMembers(members)
 }
 
-function renderTasks(tasks) {
+function renderTasks (tasks) {
   taskList.innerHTML = ''
 
   tasks.forEach((task) => {
@@ -78,12 +78,12 @@ function renderTasks(tasks) {
 
     const select = document.createElement('select')
       ;['pending', 'in_progress', 'done'].forEach((status) => {
-        const option = document.createElement('option')
-        option.value = status
-        option.textContent = status
-        if (task.status === status) option.selected = true
-        select.appendChild(option)
-      })
+      const option = document.createElement('option')
+      option.value = status
+      option.textContent = status
+      if (task.status === status) option.selected = true
+      select.appendChild(option)
+    })
 
     select.addEventListener('change', async () => {
       const response = await apiFetch(`/tasks/${task.id}`, {
@@ -113,7 +113,7 @@ function renderTasks(tasks) {
   }
 }
 
-function renderMembers(members) {
+function renderMembers (members) {
   memberList.innerHTML = ''
 
   members.forEach((member) => {

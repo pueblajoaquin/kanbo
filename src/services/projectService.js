@@ -1,6 +1,6 @@
 const prisma = require('../prisma')
 
-async function createProjectService({ name, description, userId }) {
+async function createProjectService ({ name, description, userId }) {
   const project = await prisma.project.create({
     data: { name, description }
   })
@@ -21,7 +21,7 @@ async function createProjectService({ name, description, userId }) {
   }
 }
 
-async function getUserProjectService(userId) {
+async function getUserProjectService (userId) {
   const memberships = await prisma.projectMembers.findMany({
     where: { userId },
     include: { project: true }
@@ -30,7 +30,7 @@ async function getUserProjectService(userId) {
   return memberships.map((m) => m.project)
 }
 
-async function getProjectByIdService(projectId, userId) {
+async function getProjectByIdService (projectId, userId) {
   const membership = await prisma.projectMembers.findFirst({
     where: { projectId, userId }
   })
@@ -43,10 +43,14 @@ async function getProjectByIdService(projectId, userId) {
     where: { id: projectId }
   })
 
+  if (!project) {
+    throw new Error('PROJECT_NOT_FOUND')
+  }
+
   return project
 }
 
-async function deleteProjectService(projectId, userId) {
+async function deleteProjectService (projectId, userId) {
   const membership = await prisma.projectMembers.findFirst({
     where: { projectId, userId, role: 'owner' }
   })
@@ -58,7 +62,7 @@ async function deleteProjectService(projectId, userId) {
   await prisma.project.delete({ where: { id: projectId } })
 }
 
-async function addMembersService(projectId, ownerId, email) {
+async function addMembersService (projectId, ownerId, email) {
   const ownerMembership = await prisma.projectMembers.findFirst({
     where: { projectId, userId: ownerId, role: 'owner' }
   })
@@ -94,7 +98,7 @@ async function addMembersService(projectId, ownerId, email) {
   return membership
 }
 
-async function getProjectMembersService(projectId, userId) {
+async function getProjectMembersService (projectId, userId) {
   const membership = await prisma.projectMembers.findFirst({
     where: { projectId, userId }
   })
