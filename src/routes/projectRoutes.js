@@ -1,5 +1,5 @@
 const express = require('express')
-const { createProjectController, deleteProjectController, getUserProjectController, getProjectByIdController } = require('../controllers/projectController')
+const { createProjectController, deleteProjectController, getUserProjectController, getProjectByIdController, addMembersController, getProjectMembersController } = require('../controllers/projectController')
 const { authenticate } = require('../middlewares/authMiddleware')
 const { createTaskController, getProjectTasksController } = require('../controllers/taskController')
 
@@ -138,5 +138,58 @@ router.post('/:id/tasks', authenticate, createTaskController)
  *         description: Project not found or user is not a member
  */
 router.get('/:id/tasks', authenticate, getProjectTasksController)
+
+/**
+ * @openapi
+ * /projects/{id}/members:
+ *   post:
+ *     summary: Invite a collaborator to a project
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Collaborator added
+ *       400:
+ *         description: Missing email or user is already a member
+ *       404:
+ *         description: Project not found, user is not the owner, or invited user does not exist
+ */
+router.post('/:id/members', authenticate, addMembersController)
+
+/**
+ * @openapi
+ * /projects/{id}/members:
+ *   get:
+ *     summary: List a project's members
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of members with their role
+ *       404:
+ *         description: Project not found or user is not a member
+ */
+router.get('/:id/members', authenticate, getProjectMembersController)
 
 module.exports = router
