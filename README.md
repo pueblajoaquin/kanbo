@@ -46,7 +46,7 @@ Start the server:
 npm start
 ```
 
-The server runs by default on `http://localhost:3000`.
+The server runs by default on `http://localhost:3000`. It serves both the API and a minimal frontend (login, register, projects, and project detail pages with their tasks).
 
 ## Testing
 
@@ -65,6 +65,8 @@ npm test
 | GET | `/projects` | List my projects | Authenticated |
 | GET | `/projects/:id` | View a project | Member |
 | DELETE | `/projects/:id` | Delete a project | Owner |
+| POST | `/projects/:id/members` | Invite a collaborator | Owner |
+| GET | `/projects/:id/members` | List project members | Member |
 | POST | `/projects/:id/tasks` | Create a task | Member |
 | GET | `/projects/:id/tasks` | List project tasks | Member |
 | PATCH | `/tasks/:id` | Update task status | Member |
@@ -84,5 +86,16 @@ src/
 prisma/
   schema.prisma - data model
   migrations/   - migration history
+public/         - minimal frontend
+  index.html      - login page
+  register.html   - registration page
+  projects.html   - project list
+  project.html    - project detail (tasks, members)
+  style.css       - shared styles
+  js/
+    api.js          - shared fetch helper (auth header)
+    auth.js         - login and register logic
+    projects.js     - project list logic
+    project.js      - project detail logic
 __tests__/      - tests with Jest + Supertest
 ```
