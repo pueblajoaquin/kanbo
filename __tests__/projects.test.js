@@ -68,6 +68,71 @@ describe('GET /projects', () => {
   })
 })
 
+describe('POST /projects/:id/members', () => {
+  it('allows the owner to invite a member and lists the owner first', async () => {
+    const uniqueSuffix = Date.now()
+    const ownerEmail = `project-owner-${uniqueSuffix}@example.com`
+    const memberEmail = `project-member-${uniqueSuffix}@example.com`
+
+    await request(app).post('/auth/register').send({ name: 'Owner', email: ownerEmail, password: '12345678' })
+    await request(app).post('/auth/register').send({ name: 'Member', email: memberEmail, password: '12345678' })
+
+    const ownerLogin = await request(app).post('/auth/login').send({ email: ownerEmail, password: '12345678' })
+    const projectResponse = await request(app)
+      .post('/projects')
+      .set('Authorization', `Bearer ${ownerLogin.body.token}`)
+      .send({ name: 'Shared Project' })
+
+    const inviteResponse = await request(app)
+      .post(`/projects/${projectResponse.body.id}/members`)
+      .set('Authorization', `Bearer ${ownerLogin.body.token}`)
+      .send({ email: memberEmail })
+
+    expect(inviteResponse.status).toBe(201)
+    expect(inviteResponse.body.role).toBe('collaborator')
+
+    const membersResponse = await request(app)
+      .get(`/projects/${projectResponse.body.id}/members`)
+      .set('Authorization', `Bearer ${ownerLogin.body.token}`)
+
+    expect(membersResponse.status).toBe(200)
+    expect(membersResponse.body).toHaveLength(2)
+    expect(membersResponse.body[0].isOwner).toBe(true)
+    expect(membersResponse.body[0].role).toBe('owner')
+
+    const invitedMember = membersResponse.body.find((member) => member.email === memberEmail)
+    expect(invitedMember).toBeDefined()
+    expect(invitedMember.role).toBe('collaborator')
+    expect(invitedMember.isOwner).toBe(false)
+  })
+
+  it('rejects invites from users who are not project owners', async () => {
+    const uniqueSuffix = Date.now()
+    const ownerEmail = `owner-only-${uniqueSuffix}@example.com`
+    const outsiderEmail = `outsider-only-${uniqueSuffix}@example.com`
+    const targetEmail = `target-only-${uniqueSuffix}@example.com`
+
+    await request(app).post('/auth/register').send({ name: 'Owner', email: ownerEmail, password: '12345678' })
+    await request(app).post('/auth/register').send({ name: 'Outsider', email: outsiderEmail, password: '12345678' })
+    await request(app).post('/auth/register').send({ name: 'Target', email: targetEmail, password: '12345678' })
+
+    const ownerLogin = await request(app).post('/auth/login').send({ email: ownerEmail, password: '12345678' })
+    const outsiderLogin = await request(app).post('/auth/login').send({ email: outsiderEmail, password: '12345678' })
+
+    const projectResponse = await request(app)
+      .post('/projects')
+      .set('Authorization', `Bearer ${ownerLogin.body.token}`)
+      .send({ name: 'Private Project' })
+
+    const inviteResponse = await request(app)
+      .post(`/projects/${projectResponse.body.id}/members`)
+      .set('Authorization', `Bearer ${outsiderLogin.body.token}`)
+      .send({ email: targetEmail })
+
+    expect(inviteResponse.status).toBe(404)
+  })
+})
+
 describe('PATCH /tasks/:id', () => {
   let token
   let taskId
