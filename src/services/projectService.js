@@ -5,7 +5,7 @@ async function createProjectService({ name, description, userId }) {
     data: { name, description }
   })
 
-  const projectMember = await prisma.projectMembers.create({
+  await prisma.projectMembers.create({
     data: {
       userId,
       projectId: project.id,
@@ -64,7 +64,7 @@ async function addMembersService(projectId, ownerId, email) {
   })
 
   if (!ownerMembership) {
-    throw new Error('NOT_AN_MEMBER')
+    throw new Error('NOT_AN_OWNER')
   }
 
   const userToInvite = await prisma.user.findUnique({
@@ -76,7 +76,7 @@ async function addMembersService(projectId, ownerId, email) {
   }
 
   const existingMembership = await prisma.projectMembers.findFirst({
-    where: ({ projectId, userId: userToInvite.id })
+    where: { projectId, userId: userToInvite.id }
   })
 
   if (existingMembership) {
@@ -108,12 +108,19 @@ async function getProjectMembersService(projectId, userId) {
     include: { user: true }
   })
 
-  return members.map((m) => ({
-    id: m.userId,
-    name: m.user.name,
-    email: m.user.email,
-    role: m.role
-  }))
+  return members
+    .sort((a, b) => {
+      if (a.role === 'owner' && b.role !== 'owner') return -1
+      if (a.role !== 'owner' && b.role === 'owner') return 1
+      return a.user.name.localeCompare(b.user.name)
+    })
+    .map((m) => ({
+      id: m.userId,
+      name: m.user.name,
+      email: m.user.email,
+      role: m.role,
+      isOwner: m.role === 'owner'
+    }))
 }
 
 module.exports = { createProjectService, getUserProjectService, getProjectByIdService, deleteProjectService, addMembersService, getProjectMembersService }

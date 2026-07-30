@@ -59,7 +59,7 @@ async function getProjectByIdController(req, res) {
 
 async function addMembersController(req, res) {
   try {
-    const { id: projectId } = req.params;
+    const { id: projectId } = req.params
     const { email } = req.body
 
     if (!email) {
@@ -70,8 +70,8 @@ async function addMembersController(req, res) {
 
     return res.status(201).json(membership)
   } catch (error) {
-    if (error.message == 'NOT_AN_OWNER') {
-      return res.status(404).json({ message: 'Project not found' })
+    if (error.message === 'NOT_AN_OWNER') {
+      return res.status(404).json({ message: 'You are not owner' })
     }
     if (error.message == 'USER_NOT_FOUND') {
       return res.status(404).json({ message: 'User not found' })
@@ -87,10 +87,10 @@ async function addMembersController(req, res) {
 
 async function getProjectMembersController(req, res) {
   try {
-    const { id: projectId } = req.params;
+    const { id: projectId } = req.params
     const members = await getProjectMembersService(projectId, req.userId)
     return res.status(200).json(members)
-  } catch {
+  } catch (error) {
     if (error.message === 'NOT_A_MEMBER') {
       return res.status(404).json({ message: 'Project not found' })
     }
