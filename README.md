@@ -1,16 +1,26 @@
 # Kanbo
 
-REST API for collaborative task and project management, with JWT authentication and role-based access control. Built with Node.js, Express and Prisma, inspired by the Kanban methodology.
+Kanbo is a collaborative project and task management API inspired by Kanban. It allows users to create projects, invite collaborators, manage tasks, and control access through role-based permissions.
 
-A user can create projects, invite collaborators, and manage tasks within each project. Each project has an owner and collaborators, with different permissions depending on the role.
+The project includes a small frontend served from the public folder, plus Swagger-based API documentation for easier testing and exploration.
+
+## Features
+
+- User registration and login with JWT authentication
+- Project creation and member management
+- Task creation, listing, and status updates
+- Role-based access control for owners and collaborators
+- Swagger UI for API documentation
+- Minimal frontend for login, registration, project listing, and task management
 
 ## Stack
 
-- **Node.js** + **Express** — server and REST API
-- **PostgreSQL** (hosted on [Neon](https://neon.tech)) — database
-- **Prisma** — ORM
-- **JWT** (`jsonwebtoken`) + **bcrypt** — authentication and password hashing
-- **Jest** + **Supertest** — testing
+- Node.js + Express — server and REST API
+- PostgreSQL — database
+- Prisma — ORM and migrations
+- JWT + bcrypt — authentication and password hashing
+- Swagger — API documentation
+- Jest + Supertest — testing
 
 ## Prerequisites
 
@@ -25,16 +35,17 @@ cd kanbo-api
 npm install
 ```
 
-Create a `.env` file in the root with:
+Create a `.env` file in the project root with:
 
-```
+```env
 DATABASE_URL="your-postgres-connection-string"
 JWT_SECRET="a-long-random-secret"
 ```
 
-Run the migrations to create the tables:
+Generate the Prisma client and run the migrations:
 
 ```bash
+npx prisma generate
 npx prisma migrate dev
 ```
 
@@ -46,9 +57,16 @@ Start the server:
 npm start
 ```
 
-The server runs by default on `http://localhost:3000`. It serves both the API and a minimal frontend (login, register, projects, and project detail pages with their tasks).
+The application will run by default at `http://localhost:3000`.
+
+### Available routes
+
+- Main frontend: `http://localhost:3000/`
+- Swagger docs: `http://localhost:3000/api-docs`
 
 ## Testing
+
+Run the test suite with:
 
 ```bash
 npm test
@@ -74,28 +92,34 @@ npm test
 
 ## Project structure
 
-```
+```text
 src/
-  routes/       - route definitions
-  controllers/  - HTTP request handling
-  services/     - business logic
-  middlewares/  - authentication and authorization
-  prisma.js     - Prisma client (singleton)
-  app.js        - Express configuration
-  index.js      - server startup
+  routes/           - route definitions
+  controllers/      - HTTP request handling
+  services/         - business logic
+  middlewares/      - authentication and authorization
+  prisma.js         - Prisma client singleton
+  app.js            - Express configuration
+  index.js          - server startup
+  swagger.js        - Swagger/OpenAPI configuration
 prisma/
-  schema.prisma - data model
-  migrations/   - migration history
-public/         - minimal frontend
-  index.html      - login page
-  register.html   - registration page
-  projects.html   - project list
-  project.html    - project detail (tasks, members)
-  style.css       - shared styles
+  schema.prisma     - data model
+  migrations/       - migration history
+docs/
+  REQUIREMENTS.md   - project requirements and notes
+public/
+  index.html        - login page
+  register.html     - registration page
+  projects.html     - project list
+  project.html      - project detail page
+  style.css         - shared styles
   js/
-    api.js          - shared fetch helper (auth header)
+    api.js          - shared fetch helper with auth headers
     auth.js         - login and register logic
-    projects.js     - project list logic
+    projects.js     - projects list logic
     project.js      - project detail logic
-__tests__/      - tests with Jest + Supertest
+__tests__/
+  auth.test.js      - authentication tests
+  projects.test.js  - project tests
+  tasks.test.js     - task tests
 ```
